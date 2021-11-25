@@ -19,12 +19,12 @@ albumentations=1.0.3
 There are several classes defined in the `datasets` directory. The data is expected in a directory name `data`, located on the same level as this repository. Below is an outline of the expected file structure:
 ```
 data/
-	imagenet/
+    imagenet/
     CIFAR10/
     300W/
     ...
 ssl-invariances/
-	datasets/
+    datasets/
     models/
     readme.md
     ...
@@ -77,10 +77,10 @@ The rest of this codebase assumes these final model checkpoints are located in a
 ```
 ssl-invariances/
     models/
-	    default.pth.tar
-	    default_w3.pth.tar
-	    dorsal.pth.tar
-	    ventral.pth.tar
+        default.pth.tar
+        default_w3.pth.tar
+        dorsal.pth.tar
+        ventral.pth.tar
 ```
 
 ## Synthetic invariance
