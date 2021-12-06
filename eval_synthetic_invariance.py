@@ -246,12 +246,11 @@ if __name__ == "__main__":
     model = model_utils.load_model(args.model, args)
     model = model.to(args.device)
 
-    imagenet_mean_std = [[0.485, 0.456, 0.406], [0.229, 0.224, 0.225]]
     clean_transform = transforms.Compose([
         transforms.Resize(args.resize),
         transforms.CenterCrop(args.crop_size),
         transforms.ToTensor(),
-        transforms.Normalize(*imagenet_mean_std)
+        transforms.Normalize(*model_utils.imagenet_mean_std)
     ])
 
     data_path = args.data[:-1] if '\r' in args.data else args.data
@@ -289,7 +288,7 @@ if __name__ == "__main__":
     else:
         k = 256
 
-    transform = ManualTransform(args.transform, k, norm=imagenet_mean_std, resize=args.resize, crop_size=args.crop_size)
+    transform = ManualTransform(args.transform, k, norm=model_utils.imagenet_mean_std, resize=args.resize, crop_size=args.crop_size)
 
     dataset = datasets.ImageFolder(split_path, transform=transform)
     clean_dataset = datasets.ImageFolder(split_path, transform=clean_transform)
