@@ -149,7 +149,7 @@ if __name__ == "__main__":
         transforms.Resize(args.resize),
         transforms.CenterCrop(args.crop_size),
         transforms.ToTensor(),
-        transforms.Normalize(*imagenet_mean_std)
+        transforms.Normalize(*model_utils.imagenet_mean_std)
     ])
     trainset = Causal3DIdent(os.path.join(args.data_root, 'Causal3DIdent'), split='train', target_type=args.target, transform=transform)
     testset = Causal3DIdent(os.path.join(args.data_root, 'Causal3DIdent'), split='test', target_type=args.target, transform=transform)
