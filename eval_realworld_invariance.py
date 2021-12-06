@@ -130,8 +130,6 @@ if __name__ == "__main__":
     resize = 224
     crop_size = 224
 
-    imagenet_mean_std = [[0.485, 0.456, 0.406], [0.229, 0.224, 0.225]]
-
     if 'camera' == DATA_INFO[args.dataset]:
         camera = DATA_INFO[args.dataset]['camera']
     k = DATA_INFO[args.dataset]['k']
@@ -140,7 +138,7 @@ if __name__ == "__main__":
         transforms.Resize(args.resize),
         transforms.CenterCrop(args.crop_size),
         transforms.ToTensor(),
-        transforms.Normalize(*imagenet_mean_std)
+        transforms.Normalize(*model_utils.imagenet_mean_std)
     ])
 
     dataset = DATA_INFO[args.dataset]['class'](
