@@ -6,7 +6,7 @@ import torch
 from torch import Tensor
 import torch.nn as nn
 from torchvision import models, transforms
-from torchvision.models.utils import load_state_dict_from_url
+from torch.hub import load_state_dict_from_url
 from typing import Type, Any, Callable, Union, List, Optional
 
 from PIL import ImageFilter
