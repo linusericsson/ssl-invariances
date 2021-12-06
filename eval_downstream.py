@@ -295,8 +295,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     args.dataset = args.dataset.lower()
 
-    imagenet_mean_std = [[0.485, 0.456, 0.406], [0.229, 0.224, 0.225]]
-    trainval, test = prepare_data(args, norm=imagenet_mean_std)
+    trainval, test = prepare_data(args, norm=model_utils.imagenet_mean_std)
 
     models_list = [model_utils.load_model(model_name, args) for model_name in args.model.split('+')]
     model = model_utils.ModelCombiner(args.fuse_mode, *models_list)
