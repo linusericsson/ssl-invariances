@@ -29,47 +29,6 @@ class GaussianBlur(object):
         return x
 
 
-class MeanEmbeddingModel(nn.Module):
-    def __init__(self, backbone, mode, k=100, image_shape=(3, 224, 224), feature_dim=2048, device='cuda'):
-        super().__init__()
-        self.backbone = backbone
-        self.mode = mode
-        self.k = k
-        self.image_shape = image_shape
-        self.feature_dim = feature_dim
-        self.device = device
-
-        if self.mode == 'ventral':
-            self.transform = transforms.Compose([
-                transforms.ToPILImage(),
-                transforms.RandomResizedCrop(224, scale=(0.2, 1.)),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor()
-            ])
-        elif self.mode == 'dorsal':
-            self.transform = transforms.Compose([
-                UnNormalize(*imagenet_mean_std),
-                transforms.ToPILImage(),
-                transforms.RandomApply([
-                    transforms.ColorJitter(0.4, 0.4, 0.4, 0.1)  # not strengthened
-                ], p=0.8),
-                transforms.RandomGrayscale(p=0.2),
-                transforms.RandomApply([GaussianBlur([.1, 2.])], p=0.5),
-                transforms.ToTensor(),
-                transforms.Normalize(*imagenet_mean_std)
-            ])
-
-    def forward(self, x):
-        mean_embedding = torch.zeros((x.shape[0], self.feature_dim))
-        for j in range(len(x)):
-            t_x = torch.zeros((self.k, *self.image_shape))
-            for i in range(self.k):
-                t_x[i, :] = self.transform(x[j].cpu())
-            z = self.backbone(t_x.to(self.device))
-            mean_embedding[j, :] = z.mean(dim=0)
-        return mean_embedding
-
-
 class ImageNetModel(nn.Module):
     def __init__(self, path, T=0.2, mlp=True, feature_layer='backbone', device='cuda'):
         super().__init__()
