@@ -31,7 +31,7 @@ import model_utils
 
 class CVTester():
     def __init__(self, model, trainval, test, device, k=5, batch_size=64,
-                 feature_dim=2048, wd_range=None, debug=False):
+                 feature_dim=2048, debug=False):
         self.model = model
         self.trainval = trainval
         self.test = test
@@ -44,11 +44,6 @@ class CVTester():
 
         self.X_trainval_feature, self.y_trainval = self._inference(self.trainval, self.model, 'trainval')
         self.X_test_feature, self.y_test = self._inference(self.test, self.model, 'test')
-
-        if wd_range is None:
-            self.wd_range = torch.logspace(-6, 5, 45)
-        else:
-            self.wd_range = wd_range
 
         self.clf = KernelRidge(kernel='rbf')
         self.pipe = make_pipeline(StandardScaler(), KernelRidge(kernel='rbf'))
