@@ -85,8 +85,6 @@ class ModelCombiner():
 def load_model(model_name, args):
     model_path = glob(os.path.join(args.ckpt_dir, model_name + '.pth.tar'))[0]
     model = ImageNetModel(model_path, feature_layer=args.feature_layer)
-    if args.mean_embedding:
-        model = MeanEmbeddingModel(model, args.mean_embedding, k=args.mean_embedding_k, device=args.device)
     model.eval()
     return model
 
