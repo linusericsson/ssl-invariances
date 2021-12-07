@@ -105,10 +105,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', default='default', type=str, metavar='M',
                         help='model to evaluate invariance of (random/supervised/default/ventral/dorsal)')
-    parser.add_argument('--mean-embedding', default='', type=str,
-                        help='whether to use mean-embedding model (ventral/dorsal)')
-    parser.add_argument('--mean-embedding-k', default=32, type=int,
-                        help='number of samples in mean-embedding model (default: 256)')
     parser.add_argument('--dataset', default='Flickr1024', type=str, metavar='DS',
                         help='dataset to evaluate invariance (Flickr1024/COIL100/ALOI-viewpoint/ALOI-illumination/ALOI-temperature/ALOT-viewpoint/ALOT-illumination/ALOT-temperature/ExposureErrors/DaLI/RealBlur)')
     parser.add_argument('--device', default='cuda:0', type=str, metavar='D',
@@ -160,7 +156,6 @@ if __name__ == "__main__":
 
     L = torch.zeros(dataset.num_classes)
     S = torch.zeros(dataset.num_classes)
-    A = torch.zeros(dataset.num_classes)
 
     with torch.no_grad():
         for i in tqdm(range(dataset.num_classes), total=dataset.num_classes):
@@ -171,13 +166,7 @@ if __name__ == "__main__":
             L[i] = torch.pdist(features, p=2).mean()
 
 
-    print(f'{args.model}: {L.mean().item()}, {S.mean().item()}, {A.mean().item()}')
+    print(f'{args.model}: {L.mean().item()}, {S.mean().item()}')
 
-    if args.mean_embedding:
-        model_name = args.model + '_m_e_' + args.mean_embedding
-    else:
-        model_name = args.model
-
-    torch.save(L, open(f"results/{model_name}_{args.feature_layer}_{args.dataset}_invariance_distance.pth", 'wb'))
-    torch.save(S, open(f"results/{model_name}_{args.feature_layer}_{args.dataset}_invariance_similarity.pth", 'wb'))
-    torch.save(A, open(f"results/{model_name}_{args.feature_layer}_{args.dataset}_alignment.pth", 'wb'))
+    torch.save(L, open(f"results/{args.model}_{args.feature_layer}_{args.dataset}_invariance_distance.pth", 'wb'))
+    torch.save(S, open(f"results/{args.model}_{args.feature_layer}_{args.dataset}_invariance_similarity.pth", 'wb'))
