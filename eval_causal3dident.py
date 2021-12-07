@@ -107,10 +107,6 @@ if __name__ == "__main__":
                         help='model to evaluate invariance of (random/supervised/default/ventral/dorsal)')
     parser.add_argument('--fuse-mode', default='cat', type=str, metavar='F',
                         help='method of fusing multiple representations (cat/add/mean)')
-    parser.add_argument('--mean-embedding', default='', type=str,
-                        help='whether to use mean-embedding model (ventral/dorsal)')
-    parser.add_argument('--mean-embedding-k', default=32, type=int,
-                        help='number of samples in mean-embedding model (default: 32)')
     parser.add_argument('--target', default='0', type=str, metavar='DS',
                         help='latent variable to regress (0-9)')
     parser.add_argument('--cv-folds', default=5, type=int,
@@ -155,9 +151,4 @@ if __name__ == "__main__":
 
     print(score)
 
-    if args.mean_embedding:
-        model_name = args.model + '_m_e_' + args.mean_embedding
-    else:
-        model_name = args.model
-
-    torch.save(score, open(f"results/{model_name}_{args.feature_layer}_causal3dident_{args.target}.pth", 'wb'))
+    torch.save(score, open(f"results/{args.model}_{args.feature_layer}_causal3dident_{args.target}.pth", 'wb'))
