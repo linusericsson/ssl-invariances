@@ -266,10 +266,6 @@ if __name__ == "__main__":
                         help='model to evaluate invariance of (random/supervised/default/ventral/dorsal)')
     parser.add_argument('--fuse-mode', default='cat', type=str, metavar='F',
                         help='method of fusing multiple representations (cat/add/mean)')
-    parser.add_argument('--mean-embedding', default='', type=str,
-                        help='whether to use mean-embedding model (ventral/dorsal)')
-    parser.add_argument('--mean-embedding-k', default=32, type=int,
-                        help='number of samples in mean-embedding model (default: 32)')
     parser.add_argument('--dataset', default='cifar10', type=str, metavar='DS',
                         help='dataset to evaluate on')
     parser.add_argument('--cv-folds', default=5, type=int,
@@ -312,9 +308,4 @@ if __name__ == "__main__":
 
     print(f'{args.model} on {args.dataset}: {test_acc:.2f}')
 
-    if args.mean_embedding:
-        model_name = args.model + '_m_e_' + args.mean_embedding
-    else:
-        model_name = args.model
-
-    torch.save(test_acc, open(f'{args.results_dir}/{model_name}_{args.dataset}.pth', 'wb'))
+    torch.save(test_acc, open(f'{args.results_dir}/{args.model}_{args.dataset}.pth', 'wb'))
