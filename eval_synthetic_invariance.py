@@ -194,15 +194,6 @@ class ManualTransform(object):
         return tuple(xs)
 
 
-def distance(a, b, normalize=False):
-    if normalize:
-        a = F.normalize(a, dim=0)
-        b = F.normalize(b, dim=0)
-        return torch.dist(a, b, p=2)
-    else:
-        return torch.dist(a, b, p=2)
-
-
 def D(a, b): # cosine similarity
     return F.cosine_similarity(a, b, dim=-1).mean()
 
@@ -217,10 +208,6 @@ if __name__ == "__main__":
                         help='dataset split to train on (train/val)')
     parser.add_argument('--model', default='default', type=str, metavar='M',
                         help='model to evaluate invariance of (random/supervised/default/ventral/dorsal)')
-    parser.add_argument('--mean-embedding', default='', type=str,
-                        help='whether to use mean-embedding model (ventral/dorsal)')
-    parser.add_argument('--mean-embedding-k', default=32, type=int,
-                        help='number of samples in mean-embedding model (default: 256)')
     parser.add_argument('--transform', default='rotation', type=str, metavar='T',
                         help='transform to evaluate invariance of (rotation/translation/colour jitter/blur etc.)')
     parser.add_argument('--device', default='cuda:0', type=str, metavar='D',
@@ -333,15 +320,5 @@ if __name__ == "__main__":
     print(f"{args.model} on {args.transform}:")
     print(f"\t distance {L.mean():.6f} and similarity {S.mean():.6f}")
 
-    if args.mean_embedding:
-        model_name = args.model + '_m_e_' + args.mean_embedding
-    else:
-        model_name = args.model
-
-    if args.dataset == 'imagenet':
-        dataset_name = ''
-    else:
-        dataset_name = '_' + args.dataset
-
-    torch.save(L, open(f"{args.results_dir}/{model_name}_{args.feature_layer}{dataset_name}_{args.transform}_invariance_distance.pth", 'wb'))
-    torch.save(S, open(f"{args.results_dir}/{model_name}_{args.feature_layer}{dataset_name}_{args.transform}_invariance_similarity.pth", 'wb'))
+    torch.save(L, open(f"{args.results_dir}/{args.model}_{args.feature_layer}_{args.dataset}_{args.transform}_invariance_distance.pth", 'wb'))
+    torch.save(S, open(f"{args.results_dir}/{args.model}_{args.feature_layer}_{args.dataset}_{args.transform}_invariance_similarity.pth", 'wb'))
